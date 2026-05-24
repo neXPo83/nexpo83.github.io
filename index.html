@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>neXPo's Studio</title>
+    <meta name="description" content="Scopri i progetti e le applicazioni sviluppate da neXPo's Studio: Snake Adventure: Echoes, HD DashHome e IA Controllo Spesa.">
+    <meta name="google" content="notranslate">
+    
+    <style>
+        :root {
+            --bg-color: #121212;
+            --text-color: #ffffff;
+            --accent-color: #00ffcc;
+            --card-bg: #1e1e1e;
+            --snake-blue: #00f3ff;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            /* FONDAMENTALE: Annulla l'offset che Google cerca di imporre */
+            top: 0 !important;
+            position: static !important;
+        }
+
+        header {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            margin: 0;
+            color: var(--accent-color);
+            letter-spacing: 2px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: #cccccc;
+            margin-top: 10px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 3rem;
+            color: #ffffff;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #333;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center; 
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 255, 204, 0.15);
+            border-color: var(--accent-color);
+        }
+
+        .app-icon {
+            width: 100px; 
+            height: 100px; 
+            border-radius: 20%; 
+            object-fit: cover;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            background-color: #2a2a2a; 
+        }
+
+        .card h3 {
+            font-size: 1.6rem;
+            margin-top: 0;
+            color: #ffffff;
+            width: 100%;
+        }
+
+        .card p {
+            color: #aaaaaa;
+            margin-bottom: 2rem;
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: transparent;
+            color: var(--accent-color);
+            text-decoration: none;
+            border: 2px solid var(--accent-color);
+            border-radius: 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            width: max-content;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            box-shadow: 0 0 15px var(--accent-color);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: #0a0a0a;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: #777;
+            border-top: 1px solid #222;
+        }
+
+        /* ========================================= */
+        /* FIX DEFINITIVO GOOGLE TRANSLATE           */
+        /* ========================================= */
+
+        /* 1. L'IFRAME ESISTE (così traduce), MA LO SPOSTIAMO FUORI DELLO SCHERMO */
+        .skiptranslate iframe,
+        .goog-te-banner-frame { 
+            position: fixed !important;
+            top: -500px !important;
+            left: -500px !important;
+            width: 1px !important;
+            height: 1px !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        } 
+
+        /* 2. Uccide il popup orrendo della "valutazione traduzione" */
+        #goog-gt-tt, .goog-te-balloon-frame { 
+            display: none !important; 
+            visibility: hidden !important; 
+        }
+
+        /* 3. Uccide l'evidenziatore giallo/blu al passaggio del mouse */
+        .goog-text-highlight { 
+            background-color: transparent !important; 
+            box-shadow: none !important; 
+            pointer-events: none !important; 
+        }
+
+        /* 4. Nasconde lo spazio fantasma (skip translate spacer) */
+        .skiptranslate > font {
+            display: none !important;
+        }
+
+        /* Nasconde il widget originale di Google in modo sicuro */
+        #google_translate_element {
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            opacity: 0;
+        }
+
+        /* ========================================= */
+        /* STILE DEL NOSTRO MENU NEON                */
+        /* ========================================= */
+        .custom-language-selector {
+            margin-bottom: 20px;
+            display: inline-block; /* Centra il blocco nell'header */
+            position: relative;
+            z-index: 1000;
+        }
+
+        .custom-language-selector select {
+            background-color: #0a0a10;
+            color: var(--snake-blue);
+            border: 1px solid var(--snake-blue);
+            padding: 8px 35px 8px 12px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+            /* Rimuove la freccia standard brutta e ne mette una custom */
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg fill='%2300f3ff' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+            background-repeat: no-repeat;
+            background-position-x: 95%;
+            background-position-y: 50%;
+            transition: box-shadow 0.3s ease, background-color 0.3s ease;
+        }
+
+        .custom-language-selector select:hover {
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
+            background-color: #111827;
+        }
+
+        .custom-language-selector select option {
+            background-color: #0a0a10;
+            color: #ffffff;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="custom-language-selector">
+            <select id="my-custom-lang" onchange="cambiaLingua(this.value)">
+                <option value="">🌍 Lingua</option>
+                <option value="it">🇮🇹 Italiano</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="es">🇪🇸 Español</option>
+                <option value="fr">🇫🇷 Français</option>
+                <option value="de">🇩🇪 Deutsch</option>
+            </select>
+        </div>
+        
+        <h1>neXPo's Studio</h1>
+        <p>Innovazione, Sviluppo e Soluzioni Software</p>
+    </header>
+
+    <div id="google_translate_element"></div>
+
+    <div class="container">
+        <h2 class="section-title">Le Nostre App</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <img src="icona-snake.png" alt="Icona Snake Adventure" class="app-icon">
+                <h3>Snake Adventure: Echoes</h3>
+                <p>Guida il serpente, sconfiggi i Boss e recupera i frammenti dei tuoi ricordi!
+                <br><br>
+                Ti sei svegliato nel vuoto. I frammenti della tua memoria sono sparsi ovunque, e l'Oblio sta cercando di inghiottire tutto. Riuscirai a ricordare chi sei?
+                <br>
+                ​Snake Adventure: Echoes non è il solito gioco del serpente. <br>
+                È un'avventura arcade frenetica e oscura, dove riflessi pronti e strategy sono l'unica via per la salvezza. Supera livelli generati proceduralmente, affronta sfide impossibili e combatti contro entità corrotte.
+                </p>
+                <a href="https://nexpo83.github.io/Snake-Adventure-Echoes/#" class="btn">Scopri di più</a>
+            </div>
+
+            <div class="card">
+                <img src="icona-dashhome.png" alt="Icona HD DashHome" class="app-icon">
+                <h3>HD DashHome</h3>
+                <p>Cruscotto auto intelligente: navigatore, autovelox e musica a portata di mano.
+                <br><br>
+                Trasforma il tuo smartphone o tablet Android nel cruscotto definitivo per la tua auto con HD DashHome! 
+                <br>
+                Progettata per chi passa molto tempo alla guida, HD DashHome racchiude in un'unica interfaccia pulita, sicura e senza distrazioni tutto ciò di cui hai bisogno durante i tuoi viaggi. Abbandona le decine di app aperte contemporaneamente: ora hai tutto sotto controllo in un solo schermo.</p>
+                <a href="https://nexpo83.github.io/HD-DashHome/#" class="btn">Scopri di più</a>
+            </div>
+
+            <div class="card">
+                <img src="icona-spesa.png" alt="Icona IA Controllo Spesa" class="app-icon">
+                <h3>AI Controllo Spesa</h3>
+                <p>Scanner AI, input vocale e calcolo Buoni Pasto per la tua spesa intelligente!
+                <br><br>
+                ​AI Controllo Spesa è l'assistente definitivo per il supermercato che ti fa risparmiare tempo e denaro, eliminando le brutte sorprese in cassa!<br>
+                ​Dimentica la vecchia carta e penna o la noia di digitare i prezzi a mano. Grazie all'Intelligenza Artificiale, fare la spesa non è mai stato così veloce e tecnologico.</p>
+                <a href="https://nexpo83.github.io/SpesaControllo/#" class="btn">Scopri di più</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 neXPo's Studio. Tutti i diritti riservati.</p>
+    </footer>
+
+    <script type="text/javascript">
+        // 1. Inizializza Google Translate
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'it',
+                includedLanguages: 'en,es,fr,de,it',
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+
+        // 2. La nostra funzione che "inganna" Google cliccando al posto dell'utente
+        function cambiaLingua(lang) {
+            if (lang === "") return;
+            
+            // Trova la select nascosta di Google
+            var selectGoogle = document.querySelector('select.goog-te-combo');
+            
+            if (selectGoogle) {
+                // Imposta il valore
+                selectGoogle.value = lang;
+                
+                // Crea e lancia l'evento "change" per forzare la traduzione
+                var event = document.createEvent("HTMLEvents");
+                event.initEvent("change", true, true);
+                selectGoogle.dispatchEvent(event);
+            }
+        }
+
+        // 3. NUOVA FUNZIONE: Auto-rileva la lingua del browser
+        function autoImpostaLingua() {
+            // Evitiamo di forzare la lingua se l'utente ci è già stato in questa sessione (memoria attiva)
+            if (sessionStorage.getItem('lingua_verificata')) return;
+
+            // Legge la lingua del browser (es. "en-US" diventa "en", "es-ES" diventa "es")
+            var linguaBrowser = (navigator.language || navigator.userLanguage).substring(0, 2).toLowerCase();
+            var lingueSupportate = ['en', 'es', 'fr', 'de']; // it è già di default nel codice html
+
+            // Se la lingua intercettata è tra quelle previste nel nostro menu...
+            if (lingueSupportate.includes(linguaBrowser)) {
+                var tentativi = 0;
+                
+                // Il widget di Google non è immediato, impiega millisecondi a creare la sua select interna
+                var intervallo = setInterval(function() {
+                    var selectGoogle = document.querySelector('select.goog-te-combo');
+                    if (selectGoogle) {
+                        clearInterval(intervallo);
+                        
+                        // Allineiamo il nostro menu grafico per fargli mostrare la lingua scelta
+                        var nostroMenu = document.getElementById('my-custom-lang');
+                        if (nostroMenu) nostroMenu.value = linguaBrowser;
+                        
+                        // Inneschiamo finalmente la traduzione
+                        cambiaLingua(linguaBrowser);
+                        
+                        // Memorizziamo nel browser che per questa sessione abbiamo già lavorato
+                        sessionStorage.setItem('lingua_verificata', 'true');
+                    }
+                    tentativi++;
+                    if (tentativi > 20) clearInterval(intervallo); // Limite di sicurezza (dopo 10 secondi si arrende)
+                }, 500);
+            } else {
+                // Se è italiano o una lingua che non supportiamo, fermiamo la procedura salvando lo stato
+                sessionStorage.setItem('lingua_verificata', 'true');
+            }
+        }
+
+        // Facciamo partire il controllo automaticamente all'apertura del sito
+        autoImpostaLingua();
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            const observer = new MutationObserver(function(mutations) {
+                // Impedisce a Google di spingere il body in basso
+                if (document.body.style.top !== '0px' && document.body.style.top !== '') {
+                    document.body.style.setProperty('top', '0px', 'important');
+                }
+                // Cerca il banner e lo annienta se cerca di apparire
+                const banner = document.querySelector('.goog-te-banner-frame');
+                if (banner) {
+                    banner.style.setProperty('display', 'none', 'important');
+                    banner.style.setProperty('height', '0px', 'important');
+                }
+            });
+
+            observer.observe(document.body, { 
+                attributes: true, 
+                attributeFilter: ['style'] 
+            });
+        });
+    </script>
+    
+</body>
+</html>
